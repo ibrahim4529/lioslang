@@ -7,20 +7,27 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	input := `=+(){},;`
+	input := `
+	def ten = 10;
+	def five = 5;
+	def add = fn(x, y){
+		x+y;
+	};
+	def result = add(five, ten);
+	`
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
+		{token.DEF, "def"},
+		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
-		{token.PLUS, "+"},
-		{token.LPAREN, "("},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.RBRACE, "}"},
-		{token.COMMA, ","},
+		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-		{token.EOF, ""},
+		{token.DEF, "def"},
+		{token.IDENT, "five"},
+		{token.ASSIGN, "="},
+		{token.INT, "5"},
 	}
 	l := lexer.New(input)
 	for i, tt := range tests {
